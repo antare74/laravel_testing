@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
-    Route::get('me', 'me');
+    Route::get('profile', 'profile');
 });
 
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::apiResource('products', ProductController::class);
+    Route::apiResource('categories', CategoryController::class);
+});
