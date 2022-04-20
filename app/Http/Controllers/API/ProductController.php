@@ -22,12 +22,6 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        $categories = Categories::all();
-        return view('pages.products.create', compact('categories'));
-    }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -59,7 +53,9 @@ class ProductController extends Controller
 
     public function show(Products $product)
     {
-        return view('pages.products.show', compact('product'));
+        return ResponseFormatter::success([
+            'product' => $product
+        ]);
     }
 
     public function edit(Products $product)
@@ -92,8 +88,9 @@ class ProductController extends Controller
                 'errors' => $e->getMessage()
             ],'Error', 422);
         }
-
-        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        return ResponseFormatter::success([
+            'product' => $product
+        ]);
     }
 
     public function destroy(Products $product)
@@ -109,7 +106,8 @@ class ProductController extends Controller
                 'errors' => $e->getMessage()
             ],'Error', 422);
         }
-
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
+        return ResponseFormatter::success([
+            'product' => null
+        ]);
     }
 }

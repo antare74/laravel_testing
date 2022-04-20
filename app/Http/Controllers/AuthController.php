@@ -72,7 +72,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        auth('api')->logout();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',
@@ -83,7 +83,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'user' => Auth::user(),
+            'user' => auth('api')->user(),
         ]);
     }
 
@@ -91,9 +91,9 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'user' => Auth::user(),
-            'authorisation' => [
-                'token' => Auth::refresh(),
+            'user' => auth('api')->user(),
+            'authorization' => [
+                'token' => auth('api')->refresh(),
                 'type' => 'bearer',
             ]
         ]);
