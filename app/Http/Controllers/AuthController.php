@@ -25,6 +25,7 @@ class AuthController extends Controller
         ]);
         $credentials = $request->only('email', 'password');
         $token = auth('api')->attempt($credentials);
+
         if (!$token) {
             return response()->json([
                 'status' => 'error',
@@ -56,7 +57,12 @@ class AuthController extends Controller
             ],'Validation Error', 422);
         }
 
-        $user = User::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+
+        ]);
 
         $token = auth('api')->login($user);
         return response()->json([
@@ -87,8 +93,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function refresh()
+    public function refresh(Request $request)
     {
+        $request->header('Access-Control-Allow-Origin', '*');
         return response()->json([
             'status' => 'success',
             'user' => auth('api')->user(),
